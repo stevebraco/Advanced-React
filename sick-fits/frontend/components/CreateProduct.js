@@ -3,7 +3,9 @@ import gql from 'graphql-tag';
 import { useState } from 'react';
 import useForm from '../lib/useForm';
 import DisplayError from './ErrorMessage';
+import { ALL_PRODUCTS_QUERY } from './Products';
 import Form from './styles/Form';
+import Router from 'next/router';
 
 const CREATE_PRODUCT_MUTATION = gql`
   mutation CREATE_PRODUCT_MUTATION(
@@ -40,6 +42,7 @@ export default function CreateProduct() {
     CREATE_PRODUCT_MUTATION,
     {
       variables: inputs,
+      refetchQueries: [{ query: ALL_PRODUCTS_QUERY }],
     }
   );
   return (
@@ -47,8 +50,12 @@ export default function CreateProduct() {
       onSubmit={async (e) => {
         e.preventDefault();
         // Submit the inputfields to the backend
-        await createProduct();
+        const res = await createProduct();
         clearForm();
+        // Go to that product's page
+        Router.push({
+          pathname: `/product/${res.data.createProduct.id}`,
+        });
       }}
     >
       <DisplayError error={error} />
