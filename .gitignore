@@ -9,5 +9,5 @@ variables.env
 *.env
 .keystone
 *.db
-finished-application/
-stepped-solutions/
+finished-application
+stepped-solutions
