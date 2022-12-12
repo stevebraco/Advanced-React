@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import Nav from './Nav';
+import Cart from './Cart';
 
 const Logo = styled.h1`
   background: red;
@@ -45,6 +46,7 @@ const Header = () => (
     <div className="sub-bar">
       <p>search</p>
     </div>
+    <Cart />
   </HeaderStyles>
 );
 

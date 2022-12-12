@@ -8,16 +8,20 @@ import { ApolloProvider } from '@apollo/client';
 import Page from '../components/Page';
 import '../components/styles/nprogress.css';
 import withData from '../lib/withData';
+import { CartStateProvider } from '../lib/cartState';
 
+// Barre de progression de la page
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
 const MyApp = ({ Component, pageProps, apollo }) => (
   <ApolloProvider client={apollo}>
-    <Page>
-      <Component {...pageProps} />
-    </Page>
+    <CartStateProvider>
+      <Page>
+        <Component {...pageProps} />
+      </Page>
+    </CartStateProvider>
   </ApolloProvider>
 );
 MyApp.getInitialProps = async function ({ Component, ctx }) {

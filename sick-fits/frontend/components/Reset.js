@@ -4,28 +4,37 @@ import Form from './styles/Form';
 import useForm from '../lib/useForm';
 import Error from './ErrorMessage';
 
-const REQUEST_RESET_MUTATION = gql`
-  mutation REQUEST_RESET_MUTATION($email: String!) {
-    sendUserPasswordResetLink(email: $email) {
+const RESET_MUTATION = gql`
+  mutation RESET_MUTATION(
+    $email: String!
+    $password: String!
+    $token: String!
+  ) {
+    redeemUserPasswordResetToken(
+      email: $email
+      password: $password
+      token: $token
+    ) {
       code
       message
     }
   }
 `;
 
-export default function RequestReset() {
+export default function Reset({ token }) {
   const { inputs, handleChange, resetForm } = useForm({
     email: '',
+    password: '',
+    token,
   });
 
-  const [signup, { data, loading, error }] = useMutation(
-    REQUEST_RESET_MUTATION,
-    {
-      variables: inputs,
-      // refetch the currently logged in user - au moment du submut on actualise la page avec la connexion user
-      // refetchQueries: [{ query: CURRENT_USER_QUERY }],
-    }
-  );
+  const [reset, { data, loading, error }] = useMutation(RESET_MUTATION, {
+    variables: inputs,
+  });
+  const successfulError = data?.redeemUserPasswordResetToken?.code
+    ? data?.redeemUserPasswordResetToken
+    : undefined;
+  console.log(error);
   // const error =
   //   data?.authenticateUserWithPassword.__typename ===
   //   'UserAuthenticationWithPasswordFailure'
@@ -34,7 +43,7 @@ export default function RequestReset() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const res = await signup().catch(console.error);
+    const res = await reset().catch(console.error);
     console.log(res);
     console.log({ data, loading, error });
     resetForm();
@@ -43,11 +52,11 @@ export default function RequestReset() {
 
   return (
     <Form method="POST" onSubmit={handleSubmit}>
-      <h2>Request a password request</h2>
-      <Error error={error} />
+      <h2>Reset Your Password</h2>
+      <Error error={error || successfulError} />
       <fieldset>
-        {data?.sendUserPasswordResetLink === null && (
-          <p>Success! check your email for a link</p>
+        {data?.redeemUserPasswordResetToken === null && (
+          <p>Success! You can now sign in</p>
         )}
 
         <label htmlFor="email">
@@ -58,6 +67,17 @@ export default function RequestReset() {
             placeholder="Your Email Address"
             autoComplete="email"
             value={inputs.email}
+            onChange={handleChange}
+          />
+        </label>
+        <label htmlFor="password">
+          password
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            autoComplete="password"
+            value={inputs.password}
             onChange={handleChange}
           />
         </label>

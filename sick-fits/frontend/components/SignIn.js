@@ -48,34 +48,36 @@ export default function SignIn() {
     // send email and password to the graphQlAPI
   }
   return (
-    <Form method="POST" onSubmit={handleSubmit}>
-      <h2>Sign In</h2>
-      <Error error={error} />
-      <fieldset>
-        <label htmlFor="email">
-          Email
-          <input
-            type="email"
-            name="email"
-            placeholder="Your Email Address"
-            autoComplete="email"
-            value={inputs.email}
-            onChange={handleChange}
-          />
-        </label>
-        <label htmlFor="password">
-          password
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            autoComplete="password"
-            value={inputs.password}
-            onChange={handleChange}
-          />
-        </label>
-        <button type="submit"> Sign In </button>
-      </fieldset>
-    </Form>
+    <>
+      <Form method="POST" onSubmit={handleSubmit}>
+        <h2>Sign In</h2>
+        <Error error={error} />
+        <fieldset>
+          <label htmlFor="email">
+            Email
+            <input
+              type="email"
+              name="email"
+              placeholder="Your Email Address"
+              autoComplete="email"
+              value={inputs.email}
+              onChange={handleChange}
+            />
+          </label>
+          <label htmlFor="password">
+            password
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              autoComplete="password"
+              value={inputs.password}
+              onChange={handleChange}
+            />
+          </label>
+          <button type="submit"> Sign In </button>
+        </fieldset>
+      </Form>
+    </>
   );
 }
